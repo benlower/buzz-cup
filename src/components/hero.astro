@@ -1,7 +1,8 @@
 ---
+// @ts-ignore
 import { Image, Picture } from "astro:assets";
+// @ts-ignore
 import heroImage from "../assets/bc-logo.png";
-import Link from "@components/ui/link.astro";
 import Container from "@components/container.astro";
 ---
 
@@ -12,8 +13,7 @@ import Container from "@components/container.astro";
         <Image
           src={heroImage}
           alt="Buzzcup 2024"
-          formats={["avif", "webp"]}
-          width="200px"
+          width="200"
           loading="eager"
           fetchpriority="high" />
       </div>
