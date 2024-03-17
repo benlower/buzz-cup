@@ -1,0 +1,33 @@
+---
+import { Image, Picture } from "astro:assets";
+import heroImage from "../assets/bc-logo.png";
+import Link from "@components/ui/link.astro";
+import Container from "@components/container.astro";
+---
+
+<div class="overflow-x-clip">
+  <Container>
+    <main class="flex justify-left items-center">
+      <div class="">
+        <Image
+          src={heroImage}
+          alt="Buzzcup 2024"
+          formats={["avif", "webp"]}
+          width="200px"
+          loading="eager"
+          fetchpriority="high" />
+      </div>
+      <div class="ml-20">
+        <h1
+          class="text-3xl lg:text-4xl xl:text-6xl font-bold lg:tracking-tight xl:tracking-tighter [text-wrap:balance] text-center lg:text-start">
+          BuzzCup™
+        </h1>
+        <p
+          class="text-lg mt-4 max-w-lg text-slate-600 [text-wrap:balance] text-center lg:text-start">
+          Links, drinks, high jinks.
+        </p>
+      </div>
+      
+    </main>
+  </Container>
+</div>

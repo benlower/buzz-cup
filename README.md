@@ -1,0 +1,3 @@
+# BuzzCup
+
+Built on Astro.
