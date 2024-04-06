@@ -1,0 +1,50 @@
+---
+import { Picture } from "astro:assets";
+import Profile from "../assets/generic.png";
+
+const genericPlayers = [
+  {
+    name: "Apply Now"
+  },
+  {
+    name: "Apply Now"
+  },
+  {
+    name: "Apply Now"
+  },
+  {
+    name: "Apply Now"
+  },
+];
+
+---
+<div class="mt-24">
+  <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold text-left ">
+    Are you <span class="text-indigo-600 font-bold">worthy</span>
+  </h2>
+</div>
+
+<div class="grid md:grid-cols-4 gap-10 mx-auto mt-12">
+  {
+    genericPlayers.map((g) => (
+      <div class="group">
+        <div class="w-full aspect-square">
+          <Picture
+            src={Profile}
+            alt="you?"
+            loading="lazy"
+            width={400}
+            height={400}
+            formats={["avif", "webp"]}
+            class="w-full h-full object-cover bg-white rounded transition group-hover:-translate-y-1 group-hover:shadow-xl"
+          />
+        </div>
+        <div class="mt-4 text-center">
+          <h2 class="text-lg text-gray-800">Apply Now</h2>
+        </div>
+      </div>
+    ))
+  }
+  
+  
+</div>
