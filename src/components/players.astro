@@ -20,7 +20,7 @@ const bcPlayers = await getCollection("players", ({ data }) => {
         <div class="w-full aspect-square">
           <Picture
             src={teamMemberEntry?.data?.avatar}
-            alt={teamMemberEntry?.data?.avatar?.alt || "Buzz Cup Player"}
+            alt={teamMemberEntry?.data?.avatarAlt || "Buzz Cup Player"}
             loading="lazy"
             width={300}
             height={300}
