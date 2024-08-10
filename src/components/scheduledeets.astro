@@ -71,14 +71,19 @@ const features = [
   const errorMessage = document.getElementById('errorMessage');
   const successMessage = document.getElementById('successMessage');
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (input.value.toLowerCase() === 'bc2024rulez!') {
-      form.classList.add('hidden');
-      successMessage.classList.remove('hidden');
-    } else {
-      errorMessage.textContent = 'Incorrect password. Please try again.';
-      errorMessage.classList.remove('hidden');
-    }
-  });
+  if(form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input && input instanceof HTMLInputElement && input.value.toLowerCase() === 'bc2024rulez!') {
+        form.classList.add('hidden');
+        if (successMessage) {
+          successMessage.classList.remove('hidden');
+        }
+      } else if (errorMessage) {
+        errorMessage.textContent = 'Incorrect password. Please try again.';
+        errorMessage.classList.remove('hidden');
+      }
+    });
+  }
+  
 </script>
