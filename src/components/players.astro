@@ -13,25 +13,23 @@ const bcPlayers = await getCollection("players", ({ data }) => {
   </h2>
 </div>
 
-<div class="grid md:grid-cols-3 gap-10 mx-auto mt-12">
+<div class="grid md:grid-cols-4 mx-auto mt-12">
   {
     bcPlayers.map((teamMemberEntry) => (
-      <div class="group">
-        <div class="w-full aspect-square">
+      <div class="group my-4 flex flex-col">
+        <div class="w-2/3">
           <Picture
             src={teamMemberEntry?.data?.avatar}
             alt={teamMemberEntry?.data?.avatarAlt || "Buzz Cup Player"}
             loading="lazy"
-            width={300}
-            height={300}
             formats={["avif", "webp"]}
-            class="w-full h-full object-cover bg-white rounded transition group-hover:-translate-y-1 group-hover:shadow-xl"
+            class="w-full h-full object-cover bg-white transition group-hover:-translate-y-1 group-hover:shadow-xl rounded-full"
           />
         </div>
 
-        <div class="mt-4 text-center">
+        <div class="mt-4">
           <h2 class="text-lg text-gray-800">{teamMemberEntry.data.name}</h2>
-          <h3 class="text-sm text-slate-500">
+          <h3 class=" text-sm text-slate-500">
             {teamMemberEntry.data.title}
           </h3>
         </div>

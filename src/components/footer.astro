@@ -5,10 +5,10 @@ const { margin } = Astro.props;
 
 <footer
   class:list={[
-    "py-14 bg-slate-100 border-t border-slate-100",
-    margin && "mt-10",
+    "mt-10 bg-slate-100 border-t border-slate-100",
+    margin,
   ]}>
-  <div class="mt-14 pt-8 px-5 border-t border-slate-200">
+  <div class="pt-4 pb-12 px-5 border-t border-slate-200">
     <Container>
       <p class="text-center text-sm text-slate-600 [text-wrap:balance]">
         Copyright © {new Date().getFullYear()} Buzz Cup. All rights reserved.
