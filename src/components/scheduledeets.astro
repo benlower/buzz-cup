@@ -2,31 +2,78 @@
 const features = [
   {
     date: "Friday, November 1",
-    title: "Golf",
-    description: "First round of golf for BuzzCup 2024! We have three foursomes.",
+    title: "BuzzCup - Round 1",
+    description: "First round of golf for BuzzCup 2024! Nine holes. Blue tees. Walking. Three clubs + putter. We have three foursomes (3:00pm, 3:09pm, 3:18pm)",
     location: "Dorado Golf Course",
+    address: "6601 E Speedway Blvd",
     time: "3:00pm",
   },
   {
+    date: "Friday, November 1",
+    title: "Dinner",
+    description: "Group dinner reservation for 10 people",
+    location: "Skyline Country Club",
+    address: "5200 E Saint Andrews Dr",
+    time: "7:00pm",
+  },
+  {
     date: "Saturday, November 2",
-    title: "Golf",
-    description: "Three foursomes. 8:00, 8:10, 8:20am.",
+    title: "BuzzCup - Round 2",
+    description: "18 holes. Gold tees. Riding. Three foursomes. 8:00, 8:10, 8:20am.",
     location: "Ventana Canyon - Mountain Course",
+    address: "6200 N Club House Ln",
     time: "8:00am",
   },
   {
+    date: "Saturday, November 2",
+    title: "Free Time",
+    description: "Free time after golf to relax and refresh",
+    location: null,
+    time: "After golf",
+  },
+  {
+    date: "Saturday, November 2",
+    title: "Burger Tour",
+    description: "Meeting point for evening burger tour. We will take Uber XLs from here for the evening.",
+    location: "Trident II",
+    address: "2910 N Swan Rd",
+    time: "5:00pm",
+  },
+  {
     date: "Sunday, November 3",
-    title: "Golf",
-    description: "Final round of BC2024. Tee times are 12:52, 1:00, 1:07pm. Followed by awards dinner.",
+    title: "BuzzCup - Final Round",
+    description: "Final round of BC2024. 18 holes. Blue tees. Tee times are 12:52, 1:00, 1:07pm.",
     location: "Skyline Country Club",
+    address: "5200 E Saint Andrews Dr",
     time: "12:52pm",
   },
+  {
+    date: "Sunday, November 3",
+    title: "Awards Dinner",
+    description: "Championship awards dinner and celebration",
+    location: "The Lower House",
+    address: "6780 E Pico Del Monte",
+    time: "6:00pm",
+  },
 ];
+
+// Group the features by date first
+const groupedFeatures = features.reduce((groups, item) => {
+  const date = item.date;
+  if (!groups[date]) {
+    groups[date] = [];
+  }
+  groups[date].push(item);
+  return groups;
+}, {});
+
+// Get unique dates in order
+const dates = [...new Set(features.map(item => item.date))];
 ---
 
-<div class="max-w-md mt-10 p-6 bg-white rounded-lg shadow-xl">
-  <form id="scheduleForm" class="space-y-4">
-    <div>
+<div class="w-full mt-10 p-6 bg-white rounded-lg shadow-xl">
+  <form id="scheduleForm" class="space-y-4 w-72 mx-auto">
+    <div class="">
       <label for="passwordInput" class="block text-sm font-medium text-gray-700">
         Enter your password:
       </label>
@@ -47,21 +94,36 @@ const features = [
   </form>
   <div id="successMessage" class="hidden">
     <h2 class="text-2xl font-bold text-green-600 mb-4">Access Granted!</h2>
-
-    {
-      features.map((item) => (
-        <div class="flex flex-col gap-4 items-start group hover:bg-slate-50 hover:border-slate-100 border border-transparent rounded-lg transition-all md:-m-5 p-5">
-          <div class="mb-8">
-            <h1 class="font-semibold text-xl">{item.date}</h1>
-            <div class="flex flex-col items-left">
-              <h2 class="font-semibold text-lg mt-2">{item.time}</h2>
-              <h3 class="font-light text-lg mt-2">{item.title} @ <span class="mt-2 font-light text-md">{item.location}</span></h3>
+    {dates.map((date) => (
+      <div class="flex flex-col gap-4 items-start group hover:bg-slate-50 hover:border-slate-100 border border-transparent rounded-lg transition-all md:-m-5 p-5">
+        <div class="mb-8 w-full">
+          <h1 class="font-semibold text-xl mb-4 border-b pb-2">{date}</h1>
+          {groupedFeatures[date].map((item) => (
+            <div class="mb-6 last:mb-0">
+              <div class="flex flex-col items-left">
+                <h2 class="font-semibold text-lg">{item.time}</h2>
+                <h3 class="font-medium text-lg mt-1">
+                  {item.title}
+                  {item.location && (
+                    <span class="font-light">
+                      {" "}@ {item.location}
+                      {item.address && (
+                        <span class="block text-sm text-gray-500 mt-1">
+                          {item.address}
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </h3>
+              </div>
+              <p class="font-light mt-2 leading-relaxed text-sm text-gray-600">
+                {item.description}
+              </p>
             </div>
-            <p class="font-thin mt-2 leading-relaxed text-sm">{item.description}</p>
-          </div>
+          ))}
         </div>
-      ))
-    }
+      </div>
+    ))}
   </div>
 </div>
 

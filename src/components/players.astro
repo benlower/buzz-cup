@@ -7,7 +7,13 @@ const bcPlayers = await getCollection("players", ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
-const sortedPlayers = bcPlayers.sort((a, b) => a.data.publishDate - b.data.publishDate );
+const sortedPlayers = bcPlayers.sort((a, b) => {
+  const nameA = a.data.name.toLowerCase();
+  const nameB = b.data.name.toLowerCase();
+  if (nameA < nameB) return -1;
+  if (nameA > nameB) return 1;
+  return 0;
+});
 ---
 <div class="mt-24">
   <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold text-left ">
@@ -17,7 +23,7 @@ const sortedPlayers = bcPlayers.sort((a, b) => a.data.publishDate - b.data.publi
 
 <div class="grid md:grid-cols-4 mx-auto mt-12">
   {
-    bcPlayers.map((teamMemberEntry) => (
+    sortedPlayers.map((teamMemberEntry) => (
       <div class="group my-4 flex flex-col">
         <div class="w-2/3">
           <Picture
