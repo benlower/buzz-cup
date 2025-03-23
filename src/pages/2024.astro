@@ -1,0 +1,15 @@
+---
+import Container from "@components/container.astro";
+import Info from "@components/info.astro";
+import Players from "@components/players.astro";
+import Highlights from "@components/2023-highlights.astro";
+import Layout from "@layouts/Layout.astro";
+---
+
+<Layout footerMargin={false}>
+  <Container>
+    <Players year={2024} collectionName={"2024players"} />
+    <Info />
+    <Highlights />
+  </Container>
+</Layout>

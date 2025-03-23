@@ -7,8 +7,8 @@ const playersCollection = defineCollection({
     draft: z.boolean(),
     name: z.string(),
     title: z.string(),
-    avatar: image().refine((img) => img.width >= 400, {
-      message: "Avatar image must be at least 400 pixels wide!",
+    avatar: image().refine((img) => img.width >= 200, {
+      message: "Avatar image must be at least 200 pixels wide!",
     }),
     avatarAlt: z.string(),
     publishDate: z.string().transform(str => new Date(str)),

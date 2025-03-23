@@ -2,8 +2,21 @@
 import { getCollection } from "astro:content";
 import { Picture } from "astro:assets";
 
+// Interface for this component's props
+interface Props {
+  year: number;
+  collectionName: string;
+}
+
+// Default props
+const {
+  year = 2025,
+  collectionName = "players"
+} = Astro.props;
+
+
 // Filter team entries with 'draft: false' & date before current date
-const bcPlayers = await getCollection("players", ({ data }) => {
+const bcPlayers = await getCollection(collectionName, ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
@@ -17,7 +30,7 @@ const sortedPlayers = bcPlayers.sort((a, b) => {
 ---
 <div class="mt-24">
   <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold text-left ">
-    BuzzCup 2024 <span class="text-indigo-600 font-bold">players</span>
+    BuzzCup {year} <span class="text-indigo-600 font-bold">players</span>
   </h2>
 </div>
 

@@ -1,0 +1,57 @@
+---
+// @ts-ignore
+import { Icon } from "astro-icon";
+
+const features = [
+  {
+    title: "Friday (Arrival Day)",
+    description:
+      "Travel, check-in, and get settled. First golf event is at 3pm. Dinner to follow.",
+    icon: "la:plane-arrival",
+  },
+  {
+    title: "Saturday (Full Day)",
+    description:
+      "One round of golf. Loads of BC points up for grabs.",
+    icon: "maki:golf",
+  },
+  {
+    title: "Sunday (Full Day)",
+    description:
+      "One round of golf. Champion will be crowned. Awards dinner.",
+    icon: "fluent:trophy-24-regular",
+  },
+  {
+    title: "Monday (Departure Day)",
+    description:
+      "Travel home. See you next year!",
+    icon: "la:plane-departure",
+  },
+
+];
+---
+
+<div class="mt-16">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    BuzzCup 2024 <span class="text-indigo-600">schedule</span>
+  </h2>
+  <p class="text-lg mt-4 text-slate-600">Friday, November 1 - Sunday, November 3, 2024</p>
+  <p class="text-lg mt-4 text-slate-600">More details <a href="/schedule" class="text-blue-600 hover:text-blue-800 underline hover:no-underline transition duration-300">here</a>.</p>
+</div>
+
+
+<div class="grid sm:grid-cols-2 md:grid-cols-2 mt-16 gap-8 md:gap-16">
+  {
+    features.map((item) => (
+      <div class="flex flex-col gap-4 items-start group hover:bg-slate-50 hover:border-slate-100 border border-transparent rounded-lg transition-all md:-m-5 p-5">
+        <div class="mt-1 bg-indigo-50 border shadow shadow-indigo-100/50 border-indigo-100 transition-colors rounded-lg grid place-items-center  p-2 w-10 h-10 shrink-0">
+          <Icon class="text-indigo-500" name={item.icon} size="24" />
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg">{item.title}</h3>{" "}
+          <p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
+        </div>
+      </div>
+    ))
+  }
+</div>

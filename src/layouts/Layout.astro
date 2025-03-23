@@ -2,10 +2,23 @@
 // @ts-ignore
 import { ViewTransitions } from "astro:transitions";
 // @ts-ignore
+import { Image } from "astro:assets";
+// @ts-ignore
+import heroImage from "../assets/bc-logo.png";
+// @ts-ignore
 import { SEO } from "astro-seo";
 import Footer from "@components/footer.astro";
 
 import "@fontsource-variable/inter/index.css";
+import Container from "@components/container.astro";
+
+// Define your navigation links
+const navLinks = [
+  { text: "Home", href: "/" },
+  // { text: "About", href: "/about" },
+  // { text: "Tournament", href: "/tournament" },
+  // { text: "Contact", href: "/contact" },
+];
 
 export interface Props {
   title?: string;
@@ -36,7 +49,7 @@ const makeTitle = title
 
     <SEO
       title={makeTitle}
-      description="BuzzCup 2024 is the best event of the year. Don't miss out on the fun!"
+      description="BuzzCup 2025 is the best event of the year. Don't miss out on the fun!"
       canonical={canonicalURL}
       twitter={{
         creator: "@benlower",
@@ -47,11 +60,11 @@ const makeTitle = title
         basic: {
           url: canonicalURL,
           type: "website",
-          title: `BuzzCup 2024`,
+          title: `BuzzCup 2025`,
           image: resolvedImageWithDomain,
         },
         image: {
-          alt: "BuzzCup 2024 Screenshot",
+          alt: "BuzzCup 2025 Screenshot",
         },
       }}
     />
@@ -65,6 +78,78 @@ const makeTitle = title
     <ViewTransitions />
   </head>
   <body>
+    <!-- Navigation Bar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <Container>
+        <nav class="flex items-center justify-between py-2">
+          <!-- Logo Section -->
+          <div class="flex items-center">
+            <a href="/" class="flex items-center">
+              <Image
+                src={heroImage}
+                alt="Buzzcup 2024"
+                width="80"
+                loading="eager"
+                fetchpriority="high"
+                class="h-auto"
+              />
+            </a>
+            <div class="ml-5">
+              <div class="text-lg font-bold">
+                BuzzCup™
+              </div>
+              <p class="text-slate-600">
+                Links, drinks, high jinks.
+              </p>
+              <p
+                class="text-sm text-slate-600">
+                Probably the best golf tourney you can play.
+              </p>
+            </div>
+          </div>
+
+          <!-- Desktop Navigation Menu -->
+          <div class="hidden md:flex items-center space-x-8">
+            {navLinks.map(link => (
+              <a 
+                href={link.href} 
+                class="text-gray-700 hover:text-emerald-600 transition-colors font-medium"
+              >
+                {link.text}
+              </a>
+            ))}
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden">
+            <button 
+              id="mobile-menu-toggle" 
+              class="text-gray-700 hover:text-emerald-600 focus:outline-none"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+          </div>
+        </nav>
+      </Container>
+
+      <!-- Mobile Navigation Menu (Hidden by default) -->
+      <div id="mobile-menu" class="md:hidden hidden bg-white shadow-md">
+        <Container>
+          <div class="flex flex-col py-4 space-y-4">
+            {navLinks.map(link => (
+              <a 
+                href={link.href} 
+                class="block text-gray-700 hover:text-emerald-600 transition-colors font-medium px-2"
+              >
+                {link.text}
+              </a>
+            ))}
+          </div>
+        </Container>
+      </div>
+    </header>
     <!-- <Navbar /> -->
     <slot />
     <Footer margin={footerMargin} />
