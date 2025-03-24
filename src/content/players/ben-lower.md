@@ -1,7 +1,7 @@
 ---
 draft: false
 name: "Ben Lower"
-title: "I was robbed!"
+title: "You can't threepeat until you defend."
 avatar: "../../assets/ben.png"
 avatarAlt: "Ben Lower"
 publishDate: "2024-03-17 12:00"
