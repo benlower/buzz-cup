@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 name: "Kyle Reed"
 title: "Dont make me Kyle Reed those putts!"
 avatar: "../../assets/kyle.png"
