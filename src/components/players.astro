@@ -48,27 +48,25 @@ const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
   </div>
 </div>
 
-<div id="players-grid" class="grid md:grid-cols-4 mx-auto mt-12">
+<div id="players-grid" data-mode="pro" class="grid md:grid-cols-4 mx-auto mt-12">
   {sortedPlayers.map((player) => (
     <div class="group my-4 flex flex-col">
       <div class="w-2/3 aspect-square relative overflow-hidden rounded-full">
-        {/* Pro photo — shown by default when available */}
         {player.data.avatarPro && (
           <Picture
             src={player.data.avatarPro}
             alt={`${player.data.name} — pro`}
             loading="lazy"
             formats={["avif", "webp"]}
-            class="player-photo player-pro w-full h-full object-cover bg-white transition group-hover:-translate-y-1"
+            class="player-pro w-full h-full object-cover bg-white transition group-hover:-translate-y-1"
           />
         )}
-        {/* Original photo */}
         <Picture
           src={player.data.avatar}
           alt={player.data.avatarAlt || "Buzz Cup Player"}
           loading="lazy"
           formats={["avif", "webp"]}
-          class={`player-photo player-original w-full h-full object-cover bg-white transition group-hover:-translate-y-1${player.data.avatarPro ? " hidden" : ""}`}
+          class="player-original w-full h-full object-cover bg-white transition group-hover:-translate-y-1"
         />
       </div>
       <div class="mt-4">
@@ -79,29 +77,26 @@ const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
   ))}
 </div>
 
+<style is:global>
+  #players-grid[data-mode="pro"] .player-original { display: none; }
+  #players-grid[data-mode="real"] .player-pro { display: none; }
+</style>
+
 <script>
   const btnPro  = document.getElementById('mode-pro');
   const btnReal = document.getElementById('mode-real');
+  const grid    = document.getElementById('players-grid');
 
-  if (btnPro && btnReal) {
-    function setMode(mode: 'pro' | 'real') {
-      document.querySelectorAll<HTMLElement>('.player-pro').forEach(el =>
-        el.classList.toggle('hidden', mode === 'real')
-      );
-      document.querySelectorAll<HTMLElement>('.player-original').forEach(el =>
-        el.classList.toggle('hidden', mode === 'pro')
-      );
-
-      btnPro.classList.toggle('bg-indigo-600', mode === 'pro');
-      btnPro.classList.toggle('text-white',     mode === 'pro');
-      btnPro.classList.toggle('text-gray-500',  mode !== 'pro');
-
-      btnReal.classList.toggle('bg-indigo-600', mode === 'real');
-      btnReal.classList.toggle('text-white',     mode === 'real');
-      btnReal.classList.toggle('text-gray-500',  mode !== 'real');
+  if (btnPro && btnReal && grid) {
+    function activate(active: HTMLElement, inactive: HTMLElement, mode: string) {
+      (grid as HTMLElement).dataset.mode = mode;
+      active.classList.add('bg-indigo-600', 'text-white');
+      active.classList.remove('text-gray-500');
+      inactive.classList.remove('bg-indigo-600', 'text-white');
+      inactive.classList.add('text-gray-500');
     }
 
-    btnPro.addEventListener('click',  () => setMode('pro'));
-    btnReal.addEventListener('click', () => setMode('real'));
+    btnPro.addEventListener('click',  () => activate(btnPro, btnReal, 'pro'));
+    btnReal.addEventListener('click', () => activate(btnReal, btnPro, 'real'));
   }
 </script>
