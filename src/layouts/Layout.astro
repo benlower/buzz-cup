@@ -197,22 +197,26 @@ const makeTitle = title
     <slot />
     <Footer margin={footerMargin} />
     <script>
-      // Mobile menu toggle
-      const menuToggle = document.getElementById('mobile-menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-      menuToggle?.addEventListener('click', () => {
-        mobileMenu?.classList.toggle('hidden');
-      });
+      function setupNav() {
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle?.addEventListener('click', () => {
+          mobileMenu?.classList.toggle('hidden');
+        });
 
-      // Past Events sub-menu toggle (mobile)
-      const pastEventsToggle = document.getElementById('mobile-past-events-toggle');
-      const pastEventsMenu = document.getElementById('mobile-past-events');
-      const pastEventsChevron = document.getElementById('mobile-past-events-chevron');
-      pastEventsToggle?.addEventListener('click', () => {
-        pastEventsMenu?.classList.toggle('hidden');
-        pastEventsMenu?.classList.toggle('flex');
-        pastEventsChevron?.classList.toggle('rotate-180');
-      });
+        // Past Events sub-menu toggle (mobile)
+        const pastEventsToggle = document.getElementById('mobile-past-events-toggle');
+        const pastEventsMenu = document.getElementById('mobile-past-events');
+        const pastEventsChevron = document.getElementById('mobile-past-events-chevron');
+        pastEventsToggle?.addEventListener('click', () => {
+          pastEventsMenu?.classList.toggle('hidden');
+          pastEventsMenu?.classList.toggle('flex');
+          pastEventsChevron?.classList.toggle('rotate-180');
+        });
+      }
+
+      document.addEventListener('astro:page-load', setupNav);
     </script>
   </body>
 </html>

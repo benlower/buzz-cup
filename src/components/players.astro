@@ -48,7 +48,7 @@ const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
   </div>
 </div>
 
-<div id="players-grid" data-mode="pro" class="grid md:grid-cols-4 mx-auto mt-12">
+<div id="players-grid" data-mode={hasProPhotos ? "pro" : undefined} class="grid md:grid-cols-4 mx-auto mt-12">
   {sortedPlayers.map((player) => (
     <div class="group my-4 flex flex-col">
       <div class="w-2/3 aspect-square relative overflow-hidden rounded-full">
@@ -83,11 +83,13 @@ const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
 </style>
 
 <script>
-  const btnPro  = document.getElementById('mode-pro');
-  const btnReal = document.getElementById('mode-real');
-  const grid    = document.getElementById('players-grid');
+  function setupToggle() {
+    const btnPro  = document.getElementById('mode-pro');
+    const btnReal = document.getElementById('mode-real');
+    const grid    = document.getElementById('players-grid');
 
-  if (btnPro && btnReal && grid) {
+    if (!btnPro || !btnReal || !grid) return;
+
     function activate(active: HTMLElement, inactive: HTMLElement, mode: string) {
       (grid as HTMLElement).dataset.mode = mode;
       active.classList.add('bg-indigo-600', 'text-white');
@@ -99,4 +101,7 @@ const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
     btnPro.addEventListener('click',  () => activate(btnPro, btnReal, 'pro'));
     btnReal.addEventListener('click', () => activate(btnReal, btnPro, 'real'));
   }
+
+  // Runs on initial load and after every ViewTransition navigation
+  document.addEventListener('astro:page-load', setupToggle);
 </script>
