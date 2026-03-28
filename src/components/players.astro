@@ -2,58 +2,106 @@
 import { getCollection } from "astro:content";
 import { Picture } from "astro:assets";
 
-// Interface for this component's props
 interface Props {
   year: number;
   collectionName: string;
 }
 
-// Default props
-const {
-  year = 2025,
-  collectionName = "players"
-} = Astro.props;
+const { year = 2025, collectionName = "players" } = Astro.props;
 
-
-// Filter team entries with 'draft: false' & date before current date
 const bcPlayers = await getCollection(collectionName, ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
-const sortedPlayers = bcPlayers.sort((a, b) => {
-  const nameA = a.data.name.toLowerCase();
-  const nameB = b.data.name.toLowerCase();
-  if (nameA < nameB) return -1;
-  if (nameA > nameB) return 1;
-  return 0;
-});
----
-<div class="mt-24">
-  <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold text-left ">
-    BuzzCup {year} <span class="text-indigo-600 font-bold">players</span>
-  </h2>
-</div>
+const sortedPlayers = bcPlayers.sort((a, b) =>
+  a.data.name.toLowerCase().localeCompare(b.data.name.toLowerCase())
+);
 
-<div class="grid md:grid-cols-4 mx-auto mt-12">
-  {
-    sortedPlayers.map((teamMemberEntry) => (
-      <div class="group my-4 flex flex-col">
-        <div class="w-2/3">
-          <Picture
-            src={teamMemberEntry?.data?.avatar}
-            alt={teamMemberEntry?.data?.avatarAlt || "Buzz Cup Player"}
-            loading="lazy"
-            formats={["avif", "webp"]}
-            class="w-full h-full object-cover bg-white transition group-hover:-translate-y-1 group-hover:shadow-xl rounded-full"
-          />
-        </div>
-        <div class="mt-4">
-          <h2 class="text-lg text-gray-800">{teamMemberEntry.data.name}</h2>
-          <h3 class=" text-sm text-slate-500">
-            {teamMemberEntry.data.title}
-          </h3>
+const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
+---
+
+<div class="mt-24">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold">
+      BuzzCup {year} <span class="text-indigo-600 font-bold">players</span>
+    </h2>
+
+    {hasProPhotos && (
+      <div class="flex items-center gap-2 text-sm font-medium">
+        <span class="text-slate-400 text-xs uppercase tracking-wide">Photo mode:</span>
+        <div class="flex rounded-full border border-gray-200 overflow-hidden shadow-sm">
+          <button
+            id="mode-pro"
+            class="px-4 py-1.5 bg-indigo-600 text-white transition-colors cursor-pointer"
+          >
+            🏆 Made the Cut
+          </button>
+          <button
+            id="mode-real"
+            class="px-4 py-1.5 text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer"
+          >
+            😬 Missed the Cut
+          </button>
         </div>
       </div>
-    ))
-  }
+    )}
+  </div>
 </div>
+
+<div id="players-grid" class="grid md:grid-cols-4 mx-auto mt-12">
+  {sortedPlayers.map((player) => (
+    <div class="group my-4 flex flex-col">
+      <div class="w-2/3 aspect-square relative overflow-hidden rounded-full">
+        {/* Pro photo — shown by default when available */}
+        {player.data.avatarPro && (
+          <Picture
+            src={player.data.avatarPro}
+            alt={`${player.data.name} — pro`}
+            loading="lazy"
+            formats={["avif", "webp"]}
+            class="player-photo player-pro w-full h-full object-cover bg-white transition group-hover:-translate-y-1"
+          />
+        )}
+        {/* Original photo */}
+        <Picture
+          src={player.data.avatar}
+          alt={player.data.avatarAlt || "Buzz Cup Player"}
+          loading="lazy"
+          formats={["avif", "webp"]}
+          class={`player-photo player-original w-full h-full object-cover bg-white transition group-hover:-translate-y-1${player.data.avatarPro ? " hidden" : ""}`}
+        />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-lg text-gray-800">{player.data.name}</h2>
+        <h3 class="text-sm text-slate-500">{player.data.title}</h3>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  const btnPro  = document.getElementById('mode-pro');
+  const btnReal = document.getElementById('mode-real');
+
+  if (btnPro && btnReal) {
+    function setMode(mode: 'pro' | 'real') {
+      document.querySelectorAll<HTMLElement>('.player-pro').forEach(el =>
+        el.classList.toggle('hidden', mode === 'real')
+      );
+      document.querySelectorAll<HTMLElement>('.player-original').forEach(el =>
+        el.classList.toggle('hidden', mode === 'pro')
+      );
+
+      btnPro.classList.toggle('bg-indigo-600', mode === 'pro');
+      btnPro.classList.toggle('text-white',     mode === 'pro');
+      btnPro.classList.toggle('text-gray-500',  mode !== 'pro');
+
+      btnReal.classList.toggle('bg-indigo-600', mode === 'real');
+      btnReal.classList.toggle('text-white',     mode === 'real');
+      btnReal.classList.toggle('text-gray-500',  mode !== 'real');
+    }
+
+    btnPro.addEventListener('click',  () => setMode('pro'));
+    btnReal.addEventListener('click', () => setMode('real'));
+  }
+</script>

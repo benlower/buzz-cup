@@ -1,42 +1,24 @@
 ---
 // @ts-ignore
 import { Icon } from "astro-icon";
+import { schedule as features } from "../data/schedule-2026";
 
-const features = [
-  {
-    title: "Thursday (Arrival Day)",
-    description:
-      "Travel, check-in, and get settled. Dinner will be served.",
-    icon: "la:plane-arrival",
-  },
-  {
-    title: "Friday (Opening Round)",
-    description:
-      "Bear Mountain. One round of golf. First tee time at 8:24am. Loads of BC points up for grabs. Evening putt-putt event and dinner.",
-    icon: "maki:golf",
-  },
-  {
-    title: "Saturday (Two Rounds)",
-    description:
-      "Gamble Sands. Two rounds of golf. Quicksands at 9:00am and full course at 1:00pm. Dinner.",
-    icon: "fluent:trophy-24-regular",
-  },
-  {
-    title: "Sunday (Final Round + Departure Day)",
-    description:
-      "Desert Canyon. Final Round. 9:36am start. BuzzCup and the clear jacket will be awarded. Travel home.",
-    icon: "la:plane-departure",
-  },
+const formatDate = (dateStr: string) =>
+  new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
 
-];
+const start = formatDate(features[0].date);
+const end = formatDate(features[features.length - 1].date);
 ---
 
 <div id="schedule" class="mt-16">
   <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
-    BuzzCup 2025 <span class="text-indigo-600">schedule</span>
+    BuzzCup 2026 <span class="text-indigo-600">schedule</span>
   </h2>
-  <p class="text-lg mt-4 text-slate-600">Thursday, May 15 - Sunday, May 18, 2024</p>
-  <!-- <p class="text-lg mt-4 text-slate-600">More details <a href="/schedule" class="text-blue-600 hover:text-blue-800 underline hover:no-underline transition duration-300">here</a>.</p> -->
+  <p class="text-lg mt-4 text-slate-600">{start} &ndash; {end}</p>
 </div>
 
 
@@ -44,11 +26,12 @@ const features = [
   {
     features.map((item) => (
       <div class="flex flex-col gap-4 items-start group hover:bg-slate-50 hover:border-slate-100 border border-transparent rounded-lg transition-all md:-m-5 p-5">
-        <div class="mt-1 bg-indigo-50 border shadow shadow-indigo-100/50 border-indigo-100 transition-colors rounded-lg grid place-items-center  p-2 w-10 h-10 shrink-0">
+        <div class="mt-1 bg-indigo-50 border shadow shadow-indigo-100/50 border-indigo-100 transition-colors rounded-lg grid place-items-center p-2 w-10 h-10 shrink-0">
           <Icon class="text-indigo-500" name={item.icon} size="24" />
         </div>
         <div>
-          <h3 class="font-semibold text-lg">{item.title}</h3>{" "}
+          <p class="text-xs font-medium text-indigo-400 uppercase tracking-wide">{formatDate(item.date)}</p>
+          <h3 class="font-semibold text-lg mt-1">{item.title}</h3>
           <p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
         </div>
       </div>

@@ -1,0 +1,8 @@
+---
+draft: true
+name: "Kyle Reed"
+title: "Dont make me Kyle Reed those putts!"
+avatar: "../../assets/players/2025/kyle.png"
+avatarAlt: "Kyle Reed"
+publishDate: "2024-04-12 12:00"
+---

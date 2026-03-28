@@ -10,6 +10,9 @@ const playersCollection = defineCollection({
     avatar: image().refine((img) => img.width >= 200, {
       message: "Avatar image must be at least 200 pixels wide!",
     }),
+    avatarPro: image().refine((img) => img.width >= 200, {
+      message: "Pro avatar image must be at least 200 pixels wide!",
+    }).optional(),
     avatarAlt: z.string(),
     publishDate: z.string().transform(str => new Date(str)),
   }),
@@ -19,4 +22,6 @@ const playersCollection = defineCollection({
 //    This key should match your collection directory name in "src/content"
 export const collections = {
   players: playersCollection,
+  '2025players': playersCollection,
+  '2024players': playersCollection,
 };
