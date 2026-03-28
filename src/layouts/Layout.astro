@@ -15,9 +15,12 @@ import Container from "@components/container.astro";
 // Define your navigation links
 const navLinks = [
   { text: "Home", href: "/" },
-  // { text: "About", href: "/about" },
-  // { text: "Tournament", href: "/tournament" },
-  // { text: "Contact", href: "/contact" },
+];
+
+const pastEvents = [
+  { text: "BC 2025", href: "/2025" },
+  { text: "BC 2024", href: "/2024" },
+  { text: "BC 2023", href: "/2023" },
 ];
 
 export interface Props {
@@ -111,13 +114,32 @@ const makeTitle = title
           <!-- Desktop Navigation Menu -->
           <div class="hidden md:flex items-center space-x-8">
             {navLinks.map(link => (
-              <a 
-                href={link.href} 
+              <a
+                href={link.href}
                 class="text-gray-700 hover:text-emerald-600 transition-colors font-medium"
               >
                 {link.text}
               </a>
             ))}
+            <!-- Past Events Dropdown -->
+            <div class="relative group">
+              <button class="flex items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors font-medium">
+                Past Events
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="absolute right-0 mt-2 w-36 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+                {pastEvents.map(link => (
+                  <a
+                    href={link.href}
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 first:rounded-t-lg last:rounded-b-lg transition-colors"
+                  >
+                    {link.text}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
 
           <!-- Mobile Menu Button -->
@@ -139,19 +161,58 @@ const makeTitle = title
         <Container>
           <div class="flex flex-col py-4 space-y-4">
             {navLinks.map(link => (
-              <a 
-                href={link.href} 
+              <a
+                href={link.href}
                 class="block text-gray-700 hover:text-emerald-600 transition-colors font-medium px-2"
               >
                 {link.text}
               </a>
             ))}
+            <!-- Past Events expandable section -->
+            <div>
+              <button
+                id="mobile-past-events-toggle"
+                class="flex items-center gap-1 w-full text-left text-gray-700 hover:text-emerald-600 transition-colors font-medium px-2"
+              >
+                Past Events
+                <svg id="mobile-past-events-chevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div id="mobile-past-events" class="hidden flex-col pl-4 mt-2 space-y-3">
+                {pastEvents.map(link => (
+                  <a
+                    href={link.href}
+                    class="block text-gray-600 hover:text-emerald-600 transition-colors text-sm px-2"
+                  >
+                    {link.text}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </Container>
       </div>
     </header>
-    <!-- <Navbar /> -->
     <slot />
     <Footer margin={footerMargin} />
+    <script>
+      // Mobile menu toggle
+      const menuToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      menuToggle?.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('hidden');
+      });
+
+      // Past Events sub-menu toggle (mobile)
+      const pastEventsToggle = document.getElementById('mobile-past-events-toggle');
+      const pastEventsMenu = document.getElementById('mobile-past-events');
+      const pastEventsChevron = document.getElementById('mobile-past-events-chevron');
+      pastEventsToggle?.addEventListener('click', () => {
+        pastEventsMenu?.classList.toggle('hidden');
+        pastEventsMenu?.classList.toggle('flex');
+        pastEventsChevron?.classList.toggle('rotate-180');
+      });
+    </script>
   </body>
 </html>

@@ -26,5 +26,8 @@
     "@fontsource-variable/inter": "^5.0.8",
     "@tailwindcss/typography": "^0.5.10",
     "sharp": "^0.33.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "sharp"]
   }
 }
