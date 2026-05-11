@@ -13,9 +13,12 @@ const bcPlayers = await getCollection(collectionName, ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
-const sortedPlayers = bcPlayers.sort((a, b) =>
+const allSorted = bcPlayers.sort((a, b) =>
   a.data.name.toLowerCase().localeCompare(b.data.name.toLowerCase())
 );
+
+const sortedPlayers = allSorted.filter((p) => !p.data.injuredReserve);
+const injuredPlayers = allSorted.filter((p) => p.data.injuredReserve);
 
 const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
 ---
@@ -76,6 +79,42 @@ const hasProPhotos = sortedPlayers.some((p) => p.data.avatarPro);
     </div>
   ))}
 </div>
+
+{injuredPlayers.length > 0 && (
+  <div class="mt-24">
+    <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold">
+      <span class="text-red-500 font-bold">Injured Reserve</span>
+    </h2>
+    <div class="grid md:grid-cols-4 mx-auto mt-12">
+      {injuredPlayers.map((player) => (
+        <div class="group my-4 flex flex-col">
+          <div class="w-2/3 aspect-square relative overflow-hidden rounded-full grayscale opacity-60">
+            {player.data.avatarPro && (
+              <Picture
+                src={player.data.avatarPro}
+                alt={`${player.data.name} — pro`}
+                loading="lazy"
+                formats={["avif", "webp"]}
+                class="w-full h-full object-cover bg-white transition group-hover:-translate-y-1"
+              />
+            )}
+            <Picture
+              src={player.data.avatar}
+              alt={player.data.avatarAlt || "Buzz Cup Player"}
+              loading="lazy"
+              formats={["avif", "webp"]}
+              class="w-full h-full object-cover bg-white transition group-hover:-translate-y-1"
+            />
+          </div>
+          <div class="mt-4">
+            <h2 class="text-lg text-gray-800">{player.data.name}</h2>
+            <h3 class="text-sm text-red-400">Injured Reserve</h3>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
 <style is:global>
   #players-grid[data-mode="pro"] .player-original { display: none; }

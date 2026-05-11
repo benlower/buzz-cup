@@ -15,6 +15,7 @@ const playersCollection = defineCollection({
     }).optional(),
     avatarAlt: z.string(),
     publishDate: z.string().transform(str => new Date(str)),
+    injuredReserve: z.boolean().optional(),
   }),
 });
 
