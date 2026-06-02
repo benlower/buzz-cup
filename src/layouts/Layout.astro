@@ -8,9 +8,13 @@ import heroImage from "../assets/bc-logo.png";
 // @ts-ignore
 import { SEO } from "astro-seo";
 import Footer from "@components/footer.astro";
+import { eventConfig } from "@data/event-config";
 
 import "@fontsource-variable/inter/index.css";
 import Container from "@components/container.astro";
+
+const eventStartISO = eventConfig.eventStart.toISOString();
+const eventEndISO = eventConfig.eventEnd.toISOString();
 
 // Define your navigation links
 const navLinks = [
@@ -121,6 +125,13 @@ const makeTitle = title
                 {link.text}
               </a>
             ))}
+            <a
+              id="nav-messages"
+              href="/messages"
+              class="hidden text-indigo-600 hover:text-indigo-800 transition-colors font-medium"
+            >
+              Messages
+            </a>
             <!-- Past Events Dropdown -->
             <div class="relative group">
               <button class="flex items-center gap-1 text-gray-700 hover:text-emerald-600 transition-colors font-medium">
@@ -168,6 +179,13 @@ const makeTitle = title
                 {link.text}
               </a>
             ))}
+            <a
+              id="nav-messages-mobile"
+              href="/messages"
+              class="hidden block text-indigo-600 hover:text-indigo-800 transition-colors font-medium px-2"
+            >
+              Messages
+            </a>
             <!-- Past Events expandable section -->
             <div>
               <button
@@ -196,8 +214,9 @@ const makeTitle = title
     </header>
     <slot />
     <Footer margin={footerMargin} />
-    <script>
+    <script define:vars={{ eventStartISO, eventEndISO }}>
       function setupNav() {
+
         // Mobile menu toggle
         const menuToggle = document.getElementById('mobile-menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');

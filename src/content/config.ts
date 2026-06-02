@@ -19,10 +19,25 @@ const playersCollection = defineCollection({
   }),
 });
 
+const messagesCollection = defineCollection({
+  schema: ({ image }) => z.object({
+    draft: z.boolean(),
+    person: z.string(),
+    publishDate: z.string().transform(str => new Date(str)),
+    image: image().refine((img) => img.width >= 200, {
+      message: "Image must be at least 200 pixels wide!",
+    }).optional(),
+    imageUrl: z.string().optional(),
+    personImage: image().optional(),
+    personImageUrl: z.string().optional(),
+  }),
+});
+
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
 export const collections = {
   players: playersCollection,
   '2025players': playersCollection,
   '2024players': playersCollection,
+  messages: messagesCollection,
 };
