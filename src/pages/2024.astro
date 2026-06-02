@@ -6,7 +6,11 @@ import Highlights from "@components/2024-highlights.astro";
 import Layout from "@layouts/Layout.astro";
 ---
 
-<Layout footerMargin={false}>
+<Layout
+  title="BuzzCup 2024 — Highlights"
+  description="Roster, photos, and highlights from BuzzCup 2024."
+  footerMargin={false}
+>
   <Container>
     <Players year={2024} collectionName={"2024players"} />
     <Info />

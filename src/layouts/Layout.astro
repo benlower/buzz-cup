@@ -29,21 +29,26 @@ const pastEvents = [
 
 export interface Props {
   title?: string;
+  description?: string;
   footerMargin?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
 const resolvedImageWithDomain = new URL(
-  "/opengraph.jpg",
+  "/opengraph.png",
   Astro.site,
 ).toString();
 
-const { title, footerMargin = true } = Astro.props;
+const { title, description, footerMargin = true } = Astro.props;
 
 const makeTitle = title
   ? title
-  : "BuzzCup 2024 - The Best Event of the Year!";
+  : "BuzzCup 2026 — The Best Event of the Year!";
+
+const makeDescription = description
+  ? description
+  : "BuzzCup 2026 — links, drinks, high jinks. Probably the best golf tourney you can play.";
 ---
 
 <!doctype html>
@@ -56,7 +61,7 @@ const makeTitle = title
 
     <SEO
       title={makeTitle}
-      description="BuzzCup 2025 is the best event of the year. Don't miss out on the fun!"
+      description={makeDescription}
       canonical={canonicalURL}
       twitter={{
         creator: "@benlower",
@@ -67,11 +72,15 @@ const makeTitle = title
         basic: {
           url: canonicalURL,
           type: "website",
-          title: `BuzzCup 2025`,
+          title: makeTitle,
           image: resolvedImageWithDomain,
         },
+        optional: {
+          description: makeDescription,
+          siteName: "BuzzCup",
+        },
         image: {
-          alt: "BuzzCup 2025 Screenshot",
+          alt: "BuzzCup logo",
         },
       }}
     />
