@@ -1,19 +1,209 @@
 ---
+// @ts-ignore
+import { Icon } from "astro-icon";
+// @ts-ignore
+import { Image } from "astro:assets";
+// @ts-ignore
+import logo from "../assets/bc-logo.png";
 import Container from "@components/container.astro";
-import Info from "@components/info.astro";
-import Players from "@components/players.astro";
-import Highlights from "@components/2025-highlights.astro";
+import Field from "@components/field-2027.astro";
 import Layout from "@layouts/Layout.astro";
+import { champions } from "@data/champions";
+import {
+  event2027,
+  schedule2027,
+  courses2027,
+  changes2027,
+} from "@data/event-2027";
+
+const fmtDay = (d: string) =>
+  new Date(`${d}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+const courseBg = [
+  "bg-gradient-to-br from-[#1d5a3b] to-[#0d3321]",
+  "bg-gradient-to-br from-[#b08a3e] to-[#5c4318]",
+  "bg-gradient-to-br from-[#8a4b2b] to-[#3d1f12]",
+];
 ---
 
 <Layout
-  title="BuzzCup 2026 — Links, drinks, high jinks"
-  description="BuzzCup 2026 — probably the best golf tourney you can play."
+  title="BuzzCup 2027 — Chelan, WA · June 10–13"
+  description="BuzzCup 2027: the cup comes home to Chelan. Bear Mountain Ranch, 36 at Gamble Sands, Desert Canyon. 12 spots. RSVP by January 15."
+  image="/og-2027.png"
   footerMargin={false}
 >
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-[#0d3321] text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(110%_80%_at_50%_0%,#1d5a3b_0%,#0d3321_65%)]"></div>
+    <div class="absolute inset-0 opacity-[0.06] bg-[repeating-linear-gradient(90deg,#fff_0px,#fff_1px,transparent_1px,transparent_48px)]"></div>
+    <Container class="relative py-16 md:py-24 text-center">
+      <Image src={logo} alt="BuzzCup" width="110" class="mx-auto h-auto drop-shadow-xl" loading="eager" />
+      <p class="mt-8 text-xs font-bold tracking-[0.3em] uppercase text-[#d4af37]">
+        {event2027.name} · {event2027.edition}
+      </p>
+      <h1 class="mt-4 font-serif text-5xl md:text-7xl font-bold tracking-tight [text-wrap:balance]">
+        The cup comes home.
+      </h1>
+      <p class="mt-5 text-lg md:text-xl text-white/85">
+        {event2027.location} · {event2027.datesLabel}
+      </p>
+      <p class="mt-2 font-serif italic text-[#f3e5b5]">
+        Back to Chelan — where the BuzzCup was born.
+      </p>
+
+      <div id="countdown" data-target={event2027.arrival} class="mt-10 inline-grid grid-cols-4 gap-2 sm:gap-4">
+        {["days", "hours", "min", "sec"].map((u) => (
+          <div class="w-[4.5rem] sm:w-24 rounded-xl bg-white/10 backdrop-blur border border-white/15 py-3">
+            <div class="font-serif text-3xl sm:text-4xl font-bold tabular-nums" data-unit={u}>–</div>
+            <div class="text-[0.65rem] tracking-[0.2em] uppercase text-white/60 mt-1">{u}</div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a href="#hold" class="rounded-full bg-[#d4af37] text-[#0d3321] font-bold px-7 py-3 shadow-[0_4px_0_#a8871f] hover:brightness-105 transition">
+          Hold your slot
+        </a>
+        <a href="/buzzcup-2027.ics" class="rounded-full border border-white/30 px-7 py-3 font-semibold hover:bg-white/10 transition">
+          📅 Save the date
+        </a>
+      </div>
+    </Container>
+  </section>
+
   <Container>
-    <Players year={2026} collectionName="players" />
-    <Info />
-    <Highlights />
+    <!-- The weekend -->
+    <section id="schedule" class="mt-20">
+      <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+        The <span class="text-emerald-700">weekend</span>
+      </h2>
+      <p class="text-lg mt-4 text-slate-600">Four days. Three courses. Seventy-two holes.</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+        {schedule2027.map((d) => (
+          <div class="rounded-2xl border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-0.5 transition bg-white">
+            <div class="flex items-center justify-between">
+              <div class="bg-emerald-50 border border-emerald-100 rounded-lg grid place-items-center w-10 h-10">
+                <Icon class="text-emerald-700" name={d.icon} size="24" />
+              </div>
+              {d.holes > 0 && (
+                <span class="text-xs font-bold rounded-full bg-[#0d3321] text-[#f3e5b5] px-2.5 py-1">{d.holes} holes</span>
+              )}
+            </div>
+            <p class="mt-5 text-xs font-bold tracking-[0.18em] uppercase text-slate-400">{d.label} · {fmtDay(d.date)}</p>
+            <h3 class="mt-1 text-xl font-bold">{d.title}</h3>
+            {d.course && <p class="font-serif text-lg text-emerald-800">{d.course}</p>}
+            <p class="mt-2 text-sm text-slate-600">{d.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Courses -->
+    <section class="mt-24">
+      <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+        The <span class="text-emerald-700">courses</span>
+      </h2>
+      <div class="grid md:grid-cols-3 gap-6 mt-10">
+        {courses2027.map((c, i) => (
+          <div class:list={["relative overflow-hidden rounded-2xl p-7 text-white min-h-[16rem] flex flex-col justify-end", courseBg[i % courseBg.length]]}>
+            <div class="absolute top-4 right-6 font-serif text-7xl font-bold text-white/10">{c.holes}</div>
+            <p class="text-xs font-bold tracking-[0.2em] uppercase text-white/70">{c.day} · {c.holes} holes</p>
+            <h3 class="mt-2 font-serif text-3xl font-bold">{c.name}</h3>
+            <p class="text-sm text-white/70">{c.where}</p>
+            <p class="mt-4 text-white/90 leading-relaxed">{c.hook}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- What's new -->
+    <section class="mt-24">
+      <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+        What's <span class="text-emerald-700">new</span> in 2027
+      </h2>
+      <div class="grid md:grid-cols-2 gap-6 mt-10">
+        {changes2027.map((c) => (
+          <div class="rounded-2xl bg-[#0d3321] p-8">
+            <div class="text-3xl">{c.emoji}</div>
+            <h3 class="mt-4 font-serif text-2xl font-bold text-[#d4af37]">{c.title}</h3>
+            <p class="mt-2 text-white/85 leading-relaxed">{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Hold your slot -->
+    <section id="hold" class="mt-24 scroll-mt-28">
+      <div class="rounded-3xl border-2 border-[#d4af37] bg-gradient-to-b from-[#fffbeb] to-white p-8 md:p-12 grid md:grid-cols-[1fr_auto] gap-8 items-center">
+        <div>
+          <p class="text-xs font-bold tracking-[0.25em] uppercase text-amber-700">Hold your slot</p>
+          <h2 class="mt-3 font-serif text-4xl md:text-5xl font-bold">${event2027.fee} gets you in.</h2>
+          <p class="mt-4 text-lg text-slate-700 max-w-2xl">
+            Every dollar is credited toward your activities — it's not extra, it's a down payment on glory.
+            Shooter is texting personal invites. Reply <b>IN</b> or <b>OUT</b> by
+            <b>{event2027.rsvpDeadlineLabel}</b>, then Venmo to lock it.
+          </p>
+          <p class="mt-3 text-slate-500">Plenty of time to save the date and secure the hall pass.</p>
+        </div>
+        <div class="text-center">
+          <div class="font-serif text-7xl font-bold text-[#0d3321] tabular-nums" id="rsvp-days" data-target={event2027.rsvpDeadline}>–</div>
+          <div class="text-xs tracking-[0.2em] uppercase text-slate-500 mt-1">days to RSVP</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The field -->
+    <section class="mt-24">
+      <Field />
+    </section>
+
+    <!-- Past champions -->
+    <section class="mt-24 mb-24">
+      <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+        Past <span class="text-emerald-700">champions</span>
+      </h2>
+      <div class="flex flex-wrap gap-4 mt-8">
+        {champions.map((c) => (
+          <a href={`/${c.year}`} class="rounded-xl border border-slate-200 px-6 py-4 hover:border-emerald-600 transition">
+            <div class="text-xs font-bold tracking-[0.2em] text-slate-400">{c.year}</div>
+            <div class="font-serif text-xl font-bold">{c.name}</div>
+          </a>
+        ))}
+        <div class="rounded-xl border-2 border-dashed border-[#d4af37] px-6 py-4">
+          <div class="text-xs font-bold tracking-[0.2em] text-amber-600">2027</div>
+          <div class="font-serif text-xl font-bold text-slate-400">You?</div>
+        </div>
+      </div>
+    </section>
   </Container>
 </Layout>
+
+<script>
+  function tick() {
+    const cd = document.getElementById("countdown");
+    if (cd) {
+      const ms = Math.max(0, new Date(cd.dataset.target!).getTime() - Date.now());
+      const parts: Record<string, number> = {
+        days: Math.floor(ms / 86_400_000),
+        hours: Math.floor(ms / 3_600_000) % 24,
+        min: Math.floor(ms / 60_000) % 60,
+        sec: Math.floor(ms / 1000) % 60,
+      };
+      cd.querySelectorAll<HTMLElement>("[data-unit]").forEach((el) => {
+        el.textContent = String(parts[el.dataset.unit!]);
+      });
+    }
+    const rsvp = document.getElementById("rsvp-days");
+    if (rsvp) {
+      const ms = new Date(rsvp.dataset.target!).getTime() - Date.now();
+      rsvp.textContent = String(Math.max(0, Math.ceil(ms / 86_400_000)));
+    }
+  }
+
+  let timer: ReturnType<typeof setInterval> | undefined;
+  document.addEventListener("astro:page-load", () => {
+    clearInterval(timer);
+    tick();
+    timer = setInterval(tick, 1000);
+  });
+</script>
