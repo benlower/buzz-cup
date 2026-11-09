@@ -2,16 +2,18 @@
 import Container from "@components/container.astro";
 import Info from "@components/info-2026.astro";
 import Players from "@components/players.astro";
+import Highlights from "@components/2026-highlights.astro";
 import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout
   title="BuzzCup 2026 — Spokane"
-  description="Roster and schedule from BuzzCup 2026 in Spokane / Coeur d'Alene."
+  description="Highlights, schedule, and roster from BuzzCup 2026 in Spokane / Coeur d'Alene."
   footerMargin={false}
 >
   <Container>
-    <Players year={2026} collectionName={"2026players"} />
+    <Highlights />
     <Info />
+    <Players year={2026} collectionName={"2026players"} />
   </Container>
 </Layout>

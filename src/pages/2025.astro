@@ -8,12 +8,12 @@ import Layout from "@layouts/Layout.astro";
 
 <Layout
   title="BuzzCup 2025 — Highlights"
-  description="Roster, photos, and highlights from BuzzCup 2025."
+  description="Photos, highlights, schedule, and roster from BuzzCup 2025."
   footerMargin={false}
 >
   <Container>
-    <Players year={2025} collectionName={"2025players"} />
-    <Info />
     <Highlights />
+    <Info />
+    <Players year={2025} collectionName={"2025players"} />
   </Container>
 </Layout>
