@@ -4,7 +4,7 @@ import { Picture } from "astro:assets";
 
 interface Props {
   year: number;
-  collectionName: string;
+  collectionName: "players" | "2024players" | "2025players" | "2026players";
 }
 
 const { year = 2025, collectionName = "players" } = Astro.props;

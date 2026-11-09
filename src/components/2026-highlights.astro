@@ -1,0 +1,50 @@
+---
+// @ts-ignore
+import { Image } from 'astro:assets';
+import { champions } from '../data/champions';
+import { dispatches, dispatchUrl } from '../data/dispatches-2026';
+
+const champion = champions.find((c) => c.year === 2026);
+---
+
+<div class="mt-24">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    BuzzCup 2026 <span class="text-indigo-600">highlights</span>
+  </h2>
+  {champion && (
+    <p class="text-lg mt-4 text-slate-600">
+      🏆 <span class="font-semibold text-slate-900">{champion.name}</span> took home the clear jacket.
+    </p>
+  )}
+  <p class="text-slate-500 mt-2">Dispatches from Shooter, filed live from Spokane &amp; Coeur d'Alene.</p>
+</div>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+  {dispatches.map((d) => (
+    <a
+      href={dispatchUrl(d.slug)}
+      target="_blank"
+      rel="noopener"
+      class="group flex flex-col rounded-lg border border-slate-200 overflow-hidden hover:border-indigo-300 hover:shadow-md transition-all"
+    >
+      {d.image ? (
+        <Image
+          src={d.image}
+          alt=""
+          width={600}
+          height={335}
+          class="w-full aspect-[16/9] object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full aspect-[16/9] bg-indigo-50 grid place-items-center text-5xl">⛳</div>
+      )}
+      <div class="p-4 bg-white relative">
+        <p class="text-xs font-medium text-indigo-400 uppercase tracking-wide">
+          {new Date(d.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+        </p>
+        <h3 class="font-semibold text-lg mt-1 leading-snug group-hover:text-indigo-600">{d.title}</h3>
+      </div>
+    </a>
+  ))}
+</div>

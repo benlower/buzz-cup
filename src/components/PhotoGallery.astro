@@ -108,10 +108,10 @@ const { photos, year } = Astro.props;
     if (!dataEl) return;
     const photos: { src: string; alt: string; caption: string }[] = JSON.parse(dataEl.textContent || '[]');
 
-    const lightbox  = document.getElementById('lightbox');
+    const lightbox  = document.getElementById('lightbox') as HTMLElement;
     const lbImg     = document.getElementById('lb-img') as HTMLImageElement;
-    const lbCaption = document.getElementById('lb-caption');
-    const lbCounter = document.getElementById('lb-counter');
+    const lbCaption = document.getElementById('lb-caption') as HTMLElement;
+    const lbCounter = document.getElementById('lb-counter') as HTMLElement;
     const lbClose   = document.getElementById('lb-close');
     const lbPrev    = document.getElementById('lb-prev');
     const lbNext    = document.getElementById('lb-next');
