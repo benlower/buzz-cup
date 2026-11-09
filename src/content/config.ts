@@ -37,6 +37,7 @@ const messagesCollection = defineCollection({
 //    This key should match your collection directory name in "src/content"
 export const collections = {
   players: playersCollection,
+  '2026players': playersCollection,
   '2025players': playersCollection,
   '2024players': playersCollection,
   messages: messagesCollection,

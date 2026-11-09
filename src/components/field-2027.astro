@@ -1,0 +1,94 @@
+---
+import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
+import { event2027 } from "@data/event-2027";
+
+// Build-time map of player name → headshot, so the live field grid can show
+// real faces for anyone who's played before. Newcomers get an initial.
+const players = await getCollection("2026players");
+const avatars: Record<string, string> = {};
+for (const p of players) {
+  const img = await getImage({
+    src: p.data.avatarPro ?? p.data.avatar,
+    width: 160,
+    height: 160,
+    format: "webp",
+  });
+  avatars[p.data.name.toLowerCase()] = img.src;
+}
+
+const slots = Array.from({ length: event2027.capacity }, (_, i) => i);
+---
+
+<div
+  id="field-2027"
+  data-api={event2027.fieldApi}
+  data-avatars={JSON.stringify(avatars)}
+  data-capacity={event2027.capacity}
+>
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <h2 class="text-4xl lg:text-5xl lg:tracking-tight font-bold">
+      The <span class="text-emerald-700">field</span>
+    </h2>
+    <p class="text-slate-600">
+      <span id="field-count" class="font-bold text-slate-900 tabular-nums">—</span> of {event2027.capacity} spots claimed
+      <span id="field-waitlist" class="hidden"></span>
+    </p>
+  </div>
+
+  <div id="field-grid" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-8 mt-10">
+    {slots.map(() => (
+      <div class="field-slot text-center">
+        <div class="mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-dashed border-slate-300 grid place-items-center text-2xl font-serif text-slate-300">?</div>
+        <div class="mt-3 text-sm text-slate-400">Open</div>
+        <div class="text-xs text-slate-400">&nbsp;</div>
+      </div>
+    ))}
+  </div>
+  <p class="mt-8 text-sm text-slate-500">
+    Invites are out. Reply to Shooter with <b>IN</b> or <b>OUT</b> by {event2027.rsvpDeadlineLabel}.
+    Spots go to the first {event2027.capacity} who commit; after that, there's a waitlist.
+  </p>
+</div>
+
+<script>
+  type FieldPlayer = { firstName: string; name: string; locked: boolean };
+  type Field = { in: FieldPlayer[]; capacity: number; waitlistCount: number };
+
+  function esc(s: string) {
+    return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  }
+
+  async function loadField() {
+    const root = document.getElementById("field-2027");
+    if (!root) return;
+    const avatars: Record<string, string> = JSON.parse(root.dataset.avatars || "{}");
+    const capacity = Number(root.dataset.capacity);
+    try {
+      const res = await fetch(root.dataset.api!, { cache: "no-store" });
+      if (!res.ok) return;
+      const field: Field = await res.json();
+      const slots = root.querySelectorAll<HTMLElement>(".field-slot");
+      field.in.slice(0, capacity).forEach((p, i) => {
+        const img = avatars[p.name.toLowerCase()];
+        const face = img
+          ? `<img src="${img}" alt="${esc(p.name)}" class="w-full h-full object-cover rounded-full" loading="lazy">`
+          : `<span class="text-3xl font-serif font-bold text-amber-300">${esc(p.firstName.charAt(0))}</span>`;
+        slots[i].innerHTML = `
+          <div class="mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-900 grid place-items-center overflow-hidden ring-4 ${p.locked ? "ring-amber-400" : "ring-emerald-100"} transition">${face}</div>
+          <div class="mt-3 text-sm font-semibold text-slate-800">${esc(p.firstName)}</div>
+          <div class="text-xs ${p.locked ? "text-amber-600 font-semibold" : "text-slate-500"}">${p.locked ? "🔒 locked in" : "in"}</div>`;
+      });
+      document.getElementById("field-count")!.textContent = String(field.in.length);
+      const wl = document.getElementById("field-waitlist")!;
+      if (field.waitlistCount > 0) {
+        wl.textContent = ` · ${field.waitlistCount} on the waitlist`;
+        wl.classList.remove("hidden");
+      }
+    } catch {
+      // Shooter's asleep — the open-slot placeholders stand.
+    }
+  }
+
+  document.addEventListener("astro:page-load", loadField);
+</script>

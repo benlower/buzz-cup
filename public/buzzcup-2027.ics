@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BuzzCup//Site//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:buzzcup-2027@buzzcup.golf
+DTSTAMP:20261009T000000Z
+DTSTART;VALUE=DATE:20270610
+DTEND;VALUE=DATE:20270614
+SUMMARY:⛳ BuzzCup 2027
+LOCATION:Chelan\, WA
+DESCRIPTION:Thursday: Arrival\nFriday: Opening Round — Bear Mountain Ranch (18)\nSaturday: 36 at Gamble Sands (36)\nSunday: Final Round — Desert Canyon (18)\n\nhttps://buzzcup.golf
+URL:https://buzzcup.golf
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

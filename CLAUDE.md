@@ -19,7 +19,7 @@ The site shows the schedule, rules, player roster, photo galleries from past yea
 
 ```
 src/
-  pages/             # Routes — index, schedule, rules, messages, privacy, terms, 2023/2024/2025 recaps, 404
+  pages/             # Routes — index (2027 teaser), schedule, rules, privacy, terms, 2023–2026 recaps, 404
   layouts/           # Layout.astro (main), MdLayout.astro (markdown pages)
   components/        # Astro components (hero, players, faq, gallery, footer, etc.)
   content/
@@ -27,11 +27,13 @@ src/
     players/         # Current-year player profiles (.md)
     2024players/     # Historical rosters
     2025players/
+    2026players/     # Frozen 2026 roster (also feeds headshots to the 2027 field grid)
     messages/        # Event-time message feed (.md)
   data/
     event-config.ts  # Event dates + messagesVisible flag
     champions.ts
     schedule-2026.ts
+    event-2027.ts    # 2027 dates, schedule, courses, what's new, fee, RSVP deadline
     gallery-*.ts     # Photo gallery data per year
   assets/            # Images processed by Astro
   utils/
@@ -46,6 +48,17 @@ Defined in `src/content/config.ts`:
 
 - **players / 2024players / 2025players** — player profiles with avatar, optional pro-style avatar, IR flag, etc. Player markdown files live in `src/content/<year>players/`.
 - **messages** — short posts shown on `/messages` during the live event. Each has a person, publishDate, and optional image.
+
+## 2027 Teaser (homepage)
+
+`src/pages/index.astro` is the BuzzCup 2027 teaser: countdown hero, schedule,
+course cards, what's new, "hold your slot", and a live **field grid**
+(`components/field-2027.astro`). The grid fetches `GET /api/field` from
+buzz-cup-shooter (override with `PUBLIC_SHOOTER_URL`) and matches names to
+2026 headshots at build time. Event facts live in `src/data/event-2027.ts` —
+keep in sync with `config/event.ts` in buzz-cup-shooter, which drives the
+invite texts and personal invite pages. `public/og-2027.png` is the link
+preview for both; `public/buzzcup-2027.ics` is the save-the-date.
 
 ## Event Config
 
